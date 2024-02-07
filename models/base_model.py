@@ -6,11 +6,19 @@ import models
 
 
 class BaseModel:
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """initializes class BaseModel"""
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        if not kwargs:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+        else:
+            time_format = "%Y-%m-%dT%H:%M:%S.%f"
+            for (key, value) in kwargs.items():
+                if key in ('created_at', 'updated_at'):
+                    self.__dict__[key] = datetime.strptime(value, time_format)
+                else:
+                    self.__dict__[key] = value
 
     def __str__(self):
         """string representation of the object"""
