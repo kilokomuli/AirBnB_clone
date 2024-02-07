@@ -14,12 +14,15 @@ class BaseModel:
 
     def __str__(self):
         """string representation of the object"""
-        return "[{}] [{}] {}".format(self.__class__.__name__, self.id, self.__dict__)
-    
+        str_ = "["
+        str_ += str(self.__class__.__name__) + '] ('
+        str_ += str(self.id) + ') ' + str(self.__dict__)
+        return str_
+
     def save(self):
         """updates currrent instance attribute with the current datetime"""
         self.updated_at = datetime.now()
-    
+
     def to_dict(self):
         """Dictionary representation of the object"""
         dict_obj = self.__dict__.copy()
