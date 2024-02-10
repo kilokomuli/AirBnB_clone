@@ -7,7 +7,8 @@
     """
 import cmd
 from models.base_model import BaseModel
-from models import storage
+from models.__init__ import storage
+import models
 
 
 class HBNBCommand(cmd.Cmd):
@@ -29,7 +30,7 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, arg):
         """Creates a new instance of BaseModel and saves it to
         JSON file and prints the id"""
-        args = inp.split()
+        args = arg.split()
         if not self.class_verification(args):
             return
 
@@ -42,7 +43,7 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, arg):
         """Prints the string representation of an instance based on
         class name and id """
-        args = inp.split()
+        args = arg.split()
 
         if not self.class_verification(args):
             return
@@ -91,7 +92,7 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, arg):
         """Prints all string represntetion of all instances based
         or not on the class name"""
-        args = inp.split()
+        args = arg.split()
         all_objects = models.storage.all()
         list_ = []
         if len(args) == 0:
