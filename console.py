@@ -57,7 +57,7 @@ class HBNBCommand(cmd.Cmd):
         objects = models.storage.all()
         print(objects[string_key])
 
-    def class_verification(cls, args):
+    def class_verification(self, args):
         """Verifies class and checks if it is in the class list.
 
         Returns:
@@ -67,13 +67,13 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return False
 
-        if args[0] not in cls.classes_list:
+        if args[0] not in self.classes_list:
             print("** class doesn't exist **")
             return False
 
         return True
 
-    def id_verification(args):
+    def id_verification(self, args):
         """Verifies id of class.
 
         Returns:
