@@ -6,6 +6,7 @@ import models
 
 
 class BaseModel:
+    """BaseModel clas"""
     def __init__(self, *args, **kwargs):
         """initializes class BaseModel"""
         if not kwargs:
