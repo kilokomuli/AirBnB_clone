@@ -14,6 +14,8 @@ import models
 class HBNBCommand(cmd.Cmd):
     """ class cmd"""
     prompt = "(hbnb) "
+    classes_list = ["BaseModel"]
+    commands_list = ["create", "show", "all", "destroy", "update", "count"]
 
     def do_quit(self, arg):
         """Exits the program"""
