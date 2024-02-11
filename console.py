@@ -158,6 +158,17 @@ class HBNBCommand(cmd.Cmd):
                     models.storage.save()
                 return
 
+    def attribute_verification(args):
+        """Verifies attributes.
+        """
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return False
+        if len(args) < 4:
+            print("** value missing **")
+            return False
+        return True
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
