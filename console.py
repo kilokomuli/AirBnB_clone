@@ -1,52 +1,63 @@
 #!/usr/bin/python3
-""" contains the entry point of the command interpreter:
-    must use module cmd
-    class definition must be:class HBNBCommand(cmd.Cmd):
-    comand interpretor shoul implement  Quit and EOF
-    help and custom (hbnb)
-    """
+"""Contains the entry point of the command interpreter.
+
+You must use the module cmd.
+Your class definition must be: class HBNBCommand(cmd.Cmd):
+Your command interpreter should implement:
+quit and EOF to exit the program,
+help (this action is provided by default by cmd but you should keep it
+updated and documented as you work through tasks),
+a custom prompt: (hbnb),
+an empty line + ENTER shouldn’t execute anything.
+Your code should not be executed when imported
+"""
 import cmd
+import models
 from models.base_model import BaseModel
 from models.__init__ import storage
-import models
 from models.user import User
-from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
+from models.place import Place
 from models.review import Review
+import shlex
 
 
 class HBNBCommand(cmd.Cmd):
-    """ class cmd"""
+    """class for command processor.
+
+    Args:
+        cmd (_type_): _description_
+    """
     prompt = "(hbnb) "
-    classes_list = [
-            "BaseModel",
-            "User",
-            "Place",
-            "State",
-            "City",
-            "Amenity",
-            "Review"
-            ]
+    classes_list = ["BaseModel", "User", "State", "City", "Amenity",
+                    "Place", "Review"]
     commands_list = ["create", "show", "all", "destroy", "update", "count"]
 
-    def do_quit(self, arg):
-        """Exits the program"""
+    def do_quit(self, args):
+        """Quit command to exit the program
+        """
         return True
 
-    def do_EOF(self, arg):
-        """Exits the progrma using EOF ctr+d"""
+    def do_EOF(self, args):
+        """EOF command to exit the program
+        """
         return True
 
     def emptyline(self):
-        """Does nothing when an empty line is entered"""
+        """Empty line shouldn't execute anything
+        """
         pass
 
-    def do_create(self, arg):
-        """Creates a new instance of BaseModel and saves it to
-        JSON file and prints the id"""
-        args = arg.split()
+    def do_create(self, inp):
+        """Creates a new instance of BaseModel, saves it (to the JSON
+        file) and prints the id.
+
+        Args:
+            class_name (class): name of current class.
+        """
+        args = inp.split()
         if not self.class_verification(args):
             return
 
@@ -56,10 +67,11 @@ class HBNBCommand(cmd.Cmd):
         inst.save()
         print(inst.id)
 
-    def do_show(self, arg):
-        """Prints the string representation of an instance based on
-        class name and id """
-        args = arg.split()
+    def do_show(self, inp):
+        """Prints the string representation of an instance based on the
+        class name and id.
+        """
+        args = inp.split()
 
         if not self.class_verification(args):
             return
@@ -71,7 +83,8 @@ class HBNBCommand(cmd.Cmd):
         objects = models.storage.all()
         print(objects[string_key])
 
-    def class_verification(self, args):
+    @classmethod
+    def class_verification(cls, args):
         """Verifies class and checks if it is in the class list.
 
         Returns:
@@ -81,13 +94,14 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return False
 
-        if args[0] not in self.classes_list:
+        if args[0] not in cls.classes_list:
             print("** class doesn't exist **")
             return False
 
         return True
 
-    def id_verification(self, args):
+    @staticmethod
+    def id_verification(args):
         """Verifies id of class.
 
         Returns:
@@ -119,10 +133,11 @@ class HBNBCommand(cmd.Cmd):
         models.storage.delete(objects[string_key])
         models.storage.save()
 
-    def do_all(self, arg):
-        """Prints all string represntetion of all instances based
-        or not on the class name"""
-        args = arg.split()
+    def do_all(self, inp):
+        """Prints all string representation of all instances based or not
+        on the class name.
+        """
+        args = inp.split()
         all_objects = models.storage.all()
         list_ = []
         if len(args) == 0:
@@ -139,8 +154,10 @@ class HBNBCommand(cmd.Cmd):
             return False
         print(list_)
 
-    def do_update(self, arg):
-        """Updates an istance based on the class name and id"""
+    def do_update(self, line):
+        """ Updates an instance based on the class name and id by adding or
+        updating attribute (save the change into the JSON file).
+        """
         act = ""
         for argv in line.split(','):
             act = act + argv
@@ -165,6 +182,32 @@ class HBNBCommand(cmd.Cmd):
                     models.storage.save()
                 return
 
+    def precmd(self, arg):
+        """Hook before the command is run.
+        If the self.block_command returns True, the command is not run.
+        Otherwise, it is run.
+        """
+        if '.' in arg and '(' in arg and ')' in arg:
+            cls = arg.split('.')
+            command = cls[1].split('(')
+            args = command[1].split(')')
+            if cls[0] in HBNBCommand.classes_list and command[0] \
+                    in HBNBCommand.commands_list:
+                arg = command[0] + ' ' + cls[0] + ' ' + args[0]
+        return arg
+
+    def do_count(self, class_name):
+        """Retrieve the number of instances of a class.
+        """
+        count = 0
+        all_objects = models.storage.all()
+        for key, value in all_objects.items():
+            keys_split = key.split('.')
+            if keys_split[0] == class_name:
+                count += 1
+        print(count)
+
+    @staticmethod
     def attribute_verification(args):
         """Verifies attributes.
         """
