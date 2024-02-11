@@ -9,12 +9,13 @@ import cmd
 from models.base_model import BaseModel
 from models.__init__ import storage
 import models
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
     """ class cmd"""
     prompt = "(hbnb) "
-    classes_list = ["BaseModel"]
+    classes_list = ["BaseModel", "User"]
     commands_list = ["create", "show", "all", "destroy", "update", "count"]
 
     def do_quit(self, arg):
@@ -90,6 +91,20 @@ class HBNBCommand(cmd.Cmd):
             return False
 
         return True
+
+    def do_destroy(self, inp):
+        """Deletes an instance based on the class name and id (save the
+        change into the JSON file).
+        """
+        args = inp.split()
+        if not self.class_verification(args):
+            return
+        if not self.id_verification(args):
+            return
+        string_key = str(args[0]) + '.' + str(args[1])
+        objects = models.storage.all()
+        models.storage.delete(objects[string_key])
+        models.storage.save()
 
     def do_all(self, arg):
         """Prints all string represntetion of all instances based

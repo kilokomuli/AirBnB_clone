@@ -2,6 +2,7 @@
 import json
 import os
 from models.base_model import BaseModel
+from models.user import User
 """Defines class FileStorage"""
 
 
@@ -32,7 +33,7 @@ class FileStorage:
         for key, value in FileStorage.__objects.items():
             serialized_obj[key] = value.to_dict()
 
-            with open(FileStorage.__file_path, 'w', encoding="utf8") as file:
+        with open(FileStorage.__file_path, 'w', encoding="utf8") as file:
                 json.dump(serialized_obj, file)
 
     def reload(self):
