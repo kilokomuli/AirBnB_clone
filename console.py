@@ -6,7 +6,6 @@
     help and custom (hbnb)
     """
 import cmd
-import shlex
 from models.base_model import BaseModel
 from models.__init__ import storage
 import models
@@ -110,10 +109,7 @@ class HBNBCommand(cmd.Cmd):
             return
         string_key = str(args[0]) + '.' + str(args[1])
         objects = models.storage.all()
-        if string_key not in objects:
-            print("** no instance found **")
-            return
-        del objects[string_key]
+        models.storage.delete(objects[string_key])
         models.storage.save()
 
     def do_all(self, arg):
@@ -127,22 +123,13 @@ class HBNBCommand(cmd.Cmd):
             for value in all_objects.values():
                 list_.append(str(value))
         elif args[0] in self.classes_list:
-            # print all instances of a specific class
-            class_name = args[0]
-            if class_name in all_objects:
-                class_instances = all_objects[class_name]
-                for instance in class_instances:
-                    list_.append(str(instance))
+            # print just arg[0] class instances
+            for (key, value) in all_objects.items():
+                if args[0] in key:
+                    list_.append(str(value))
         else:
-            class_name = args[0]
-            module = getattr(models, class_name, None)
-            if module:
-                class_instances = module.all()
-                for instance in class_instances.values():
-                    list_.append(str(instance))
-            else:
-                print("** class doesn't exist **")
-                return False
+            print("** class doesn't exist **")
+            return False
         print(list_)
 
     def do_update(self, arg):
