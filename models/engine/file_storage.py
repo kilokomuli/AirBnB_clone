@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-"""Defines a class FileStorage.
-"""
+"""Defines a class FileStorage."""
 import json
 import os
 from models.base_model import BaseModel
@@ -14,8 +13,7 @@ from models.review import Review
 
 class FileStorage():
     """Class that serializes instances to a JSON file and deserializes
-    JSON file to instances.
-    """
+    JSON file to instances."""
     __file_path = "file.json"
     __objects = {}
 
@@ -25,32 +23,24 @@ class FileStorage():
         pass
 
     def all(self):
-        """Returns the dictionary objects.
-
-        Returns:
-            dict: objects.
-        """
+        """Returns a new dictionary"""
         return self.__objects
 
     def new(self, obj):
-        """Sets in __objects the obj with key <obj class name>.id.
-
-        Args:
-            obj (any): object.
-        """
+        """Sets in __objects the obj with key <obj class name>.id."""
         key = obj.__class__.__name__ + "." + obj.id
         self.__objects[key] = obj
 
     def save(self):
         """Serializes __objects to the JSON file (path: __file_path).
         """
-        dictionary = {}
+        serialized_obj = {}
 
         for key, value in FileStorage.__objects.items():
-            dictionary[key] = value.to_dict()
+            serialized_obj[key] = value.to_dict()
 
         with open(FileStorage.__file_path, 'w', encoding="utf-8") as myFile:
-            json.dump(dictionary, myFile)
+            json.dump(serialized_obj, myFile)
 
     def reload(self):
         """Deserializes the JSON file to __objects only if the JSON file
@@ -58,8 +48,8 @@ class FileStorage():
         exist, no exception should be raised)
         """
         try:
-            with open(self.__file_path, 'r', encoding='utf-8') as myFile:
-                my_obj_dump = myFile.read()
+            with open(self.__file_path, 'r', encoding='utf-8') as file:
+                my_obj_dump = file.read()
         except Exception:
             return
         objects = eval(my_obj_dump)

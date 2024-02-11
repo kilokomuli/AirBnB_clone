@@ -25,39 +25,36 @@ import shlex
 
 
 class HBNBCommand(cmd.Cmd):
-    """class for command processor.
+    """class for command processor."""
 
-    Args:
-        cmd (_type_): _description_
-    """
     prompt = "(hbnb) "
-    classes_list = ["BaseModel", "User", "State", "City", "Amenity",
-                    "Place", "Review"]
+    classes_list = [
+            "BaseModel",
+            "User",
+            "State",
+            "City",
+            "Amenity",
+            "Place",
+            "Review"
+            ]
     commands_list = ["create", "show", "all", "destroy", "update", "count"]
 
     def do_quit(self, args):
-        """Quit command to exit the program
-        """
+        """exit the program"""
         return True
 
     def do_EOF(self, args):
-        """EOF command to exit the program
-        """
+        """EOF command to exit the program"""
         return True
 
     def emptyline(self):
-        """Empty line shouldn't execute anything
-        """
+        """Empty line shouldn't execute anything"""
         pass
 
-    def do_create(self, inp):
+    def do_create(self, arg):
         """Creates a new instance of BaseModel, saves it (to the JSON
-        file) and prints the id.
-
-        Args:
-            class_name (class): name of current class.
-        """
-        args = inp.split()
+        file) and prints the id."""
+        args = arg.split()
         if not self.class_verification(args):
             return
 
@@ -67,11 +64,10 @@ class HBNBCommand(cmd.Cmd):
         inst.save()
         print(inst.id)
 
-    def do_show(self, inp):
+    def do_show(self, arg):
         """Prints the string representation of an instance based on the
-        class name and id.
-        """
-        args = inp.split()
+        class name and id."""
+        args = arg.split()
 
         if not self.class_verification(args):
             return
@@ -102,11 +98,7 @@ class HBNBCommand(cmd.Cmd):
 
     @staticmethod
     def id_verification(args):
-        """Verifies id of class.
-
-        Returns:
-            bool: True or False depending on status of id.
-        """
+        """Verifies id of class."""
         if len(args) < 2:
             print("** instance id missing **")
             return False
@@ -119,11 +111,11 @@ class HBNBCommand(cmd.Cmd):
 
         return True
 
-    def do_destroy(self, inp):
+    def do_destroy(self, arg):
         """Deletes an instance based on the class name and id (save the
         change into the JSON file).
         """
-        args = inp.split()
+        args = arg.split()
         if not self.class_verification(args):
             return
         if not self.id_verification(args):
@@ -133,11 +125,11 @@ class HBNBCommand(cmd.Cmd):
         models.storage.delete(objects[string_key])
         models.storage.save()
 
-    def do_all(self, inp):
+    def do_all(self, arg):
         """Prints all string representation of all instances based or not
         on the class name.
         """
-        args = inp.split()
+        args = arg.split()
         all_objects = models.storage.all()
         list_ = []
         if len(args) == 0:
