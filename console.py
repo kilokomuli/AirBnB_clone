@@ -134,8 +134,15 @@ class HBNBCommand(cmd.Cmd):
                 for instance in class_instances:
                     list_.append(str(instance))
         else:
-            print("** class doesn't exist **")
-            return False
+            class_name = args[0]
+            module = getattr(models, class_name, None)
+            if module:
+                class_instances = module.all()
+                for instance in class_instances.values():
+                    list_.append(str(instance))
+            else:
+                print("** class doesn't exist **")
+                return False
         print(list_)
 
     def do_update(self, arg):
