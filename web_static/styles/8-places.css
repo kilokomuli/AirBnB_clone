@@ -78,7 +78,7 @@
     margin-right: auto;
     height: 50px;
     width: 50px;
-    background: url("../images/icon-max_guest.png") no-repeat center;
+    background: url("../images/icon_group.png") no-repeat center;
 }
 
 .bed_image {
@@ -86,7 +86,7 @@
     margin-right: auto;
     height: 50px;
     width: 50px;
-    background: url("../images/icon-number_rooms.png") no-repeat center;
+    background: url("../images/icon_bed.png") no-repeat center;
 }
 
 .bath_image {
@@ -94,7 +94,7 @@
     margin-right: auto;
     height: 50px;
     width: 50px;
-    background: url("../images/icon-bath.png") no-repeat center;
+    background: url("../images/icon_bath.png") no-repeat center;
 }
 
 .user > p {
